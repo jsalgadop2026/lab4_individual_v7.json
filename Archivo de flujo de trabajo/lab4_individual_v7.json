@@ -1,0 +1,1007 @@
+{
+  "id": "9d009603-2139-41bc-8012-aa9294ade2c3",
+  "revision": 0,
+  "last_node_id": 23,
+  "last_link_id": 27,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "Note",
+      "pos": [
+        -242.11860076044468,
+        -71.99684916884905
+      ],
+      "size": [
+        760,
+        155
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "PASO 1 — ANTES DE EJECUTAR",
+      "properties": {},
+      "widgets_values": [
+        "INSTRUCCIONES\n\n1. Clic en CheckpointLoaderSimple → seleccionar modelo SD1.5 del dropdown.\n2. Clic en LoadImage → Upload Image → subir foto del integrante.\n3. Presionar Run (esquina superior derecha).\n\nCAMBIOS:\n  LEVE:     cine noir | euler + sgm_uniform | steps 30 | cfg 6.5\n  MODERADO: editorial moda | dpmpp_sde + karras | steps 35 | cfg 8.0\n  FUERTE:   polar/Luna | dpmpp_2m_sde + exponential | steps 40 | cfg 9.0"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 2,
+      "type": "CheckpointLoaderSimple",
+      "pos": [
+        2.8916921218375364,
+        231.61039579320584
+      ],
+      "size": [
+        411.359375,
+        131.59375
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "slot_index": 0,
+          "links": [
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "slot_index": 1,
+          "links": [
+            4,
+            5,
+            6,
+            7
+          ]
+        },
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "slot_index": 2,
+          "links": [
+            8,
+            9,
+            10,
+            27
+          ]
+        }
+      ],
+      "title": "← PASO 1: ABRIR DROPDOWN Y ELEGIR MODELO SD1.5",
+      "properties": {
+        "Node name for S&R": "CheckpointLoaderSimple"
+      },
+      "widgets_values": [
+        "realismByStableYogi_v4LCM.safetensors"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "LoadImage",
+      "pos": [
+        0.10502595871093945,
+        496.6224893957028
+      ],
+      "size": [
+        380,
+        343.5625
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "slot_index": 0,
+          "links": [
+            11
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "slot_index": 1,
+          "links": null
+        }
+      ],
+      "title": "← PASO 2: SUBIR TU FOTO AQUÍ",
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "c6155e1c10203ab2328460cc89cf9b7627dff0335a7d3eb56b5819b31658b7d6.jpg",
+        "image"
+      ]
+    },
+    {
+      "id": 4,
+      "type": "VAEEncode",
+      "pos": [
+        465.79629069615555,
+        436.4496087550375
+      ],
+      "size": [
+        225,
+        71.59375
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "pixels",
+          "type": "IMAGE",
+          "link": 11
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 8
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "slot_index": 0,
+          "links": [
+            12,
+            13,
+            14
+          ]
+        }
+      ],
+      "title": "Foto → Latente img2img",
+      "properties": {
+        "Node name for S&R": "VAEEncode"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 5,
+      "type": "CLIPTextEncode",
+      "pos": [
+        770.4354756479362,
+        3.1580575719749504
+      ],
+      "size": [
+        440,
+        120
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 4
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "slot_index": 0,
+          "links": [
+            15,
+            16,
+            17
+          ]
+        }
+      ],
+      "title": "Prompt NEGATIVO",
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "(worst quality, low quality:1.4), blurry, deformed, ugly, bad anatomy, watermark, text, signature, extra fingers, missing fingers, mutated hands, distorted face, out of frame, duplicate, extra limbs, floating limbs, disconnected limbs, cross-eyed, disfigured, gross proportions, long neck, overexposed, underexposed, grainy, noise, jpeg artifacts, pixelated"
+      ]
+    },
+    {
+      "id": 6,
+      "type": "CLIPTextEncode",
+      "pos": [
+        762.6613167327345,
+        198.53075237584767
+      ],
+      "size": [
+        440,
+        120
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 5
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "slot_index": 0,
+          "links": [
+            18
+          ]
+        }
+      ],
+      "title": "Prompt LEVE — cine noir sobrio (denoise 0.45)",
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "dramatic cine noir portrait, high contrast black and white photography, moody shadows, single key light, smoke atmosphere, 1940s detective aesthetic, sharp focus on face, film grain texture, photorealistic, identity preserved, cinematic, professional photography, detailed skin"
+      ]
+    },
+    {
+      "id": 7,
+      "type": "CLIPTextEncode",
+      "pos": [
+        764.1287826852898,
+        406.66308821162124
+      ],
+      "size": [
+        477.65625,
+        120
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 6
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "slot_index": 0,
+          "links": [
+            19
+          ]
+        }
+      ],
+      "title": "Prompt MODERADO — editorial de revista de moda (denoise 0.65)",
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "high fashion editorial portrait, luxury magazine cover, soft studio lighting, elegant professional attire, Canon 5D Mark IV photography, shallow depth of field, color graded, Vogue style, sophisticated composition, recognizable face, 8k uhd, sharp focus, photorealistic"
+      ]
+    },
+    {
+      "id": 8,
+      "type": "CLIPTextEncode",
+      "pos": [
+        755.6701141265333,
+        610.5190260066236
+      ],
+      "size": [
+        507.71875,
+        120
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "slot_index": 0,
+          "links": [
+            20
+          ]
+        }
+      ],
+      "title": "Prompt FUERTE — explorador polar / escena en la Luna (denoise 0.85)",
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "polar explorer in Antarctica, extreme cold weather gear, icy tundra landscape, dramatic overcast sky, photorealistic, cinematic wide shot, detailed textures, OR astronaut on the Moon surface, NASA spacesuit, lunar landscape, Earth visible in background, dramatic lighting, ultra detailed, 8k"
+      ]
+    },
+    {
+      "id": 9,
+      "type": "KSampler",
+      "pos": [
+        1272.0840870676116,
+        -311.1593859215486
+      ],
+      "size": [
+        432.28125,
+        564.875
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 1
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 18
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 15
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 12
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "slot_index": 0,
+          "links": [
+            21
+          ]
+        }
+      ],
+      "title": "KSampler LEVE   — euler / sgm_uniform / steps 30 / cfg 6.5",
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        622489200662507,
+        "randomize",
+        30,
+        6.5,
+        "euler",
+        "sgm_uniform",
+        0.45
+      ]
+    },
+    {
+      "id": 10,
+      "type": "KSampler",
+      "pos": [
+        1253.922241120346,
+        212.19287081965456
+      ],
+      "size": [
+        471.1875,
+        564.875
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 2
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 19
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 16
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 13
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "slot_index": 0,
+          "links": [
+            22
+          ]
+        }
+      ],
+      "title": "KSampler MODERADO — dpmpp_sde / karras / steps 35 / cfg 8.0",
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        61854095139935,
+        "randomize",
+        35,
+        8,
+        "dpmpp_sde",
+        "karras",
+        0.65
+      ]
+    },
+    {
+      "id": 11,
+      "type": "KSampler",
+      "pos": [
+        1249.7788428862964,
+        642.2858734594229
+      ],
+      "size": [
+        510.25,
+        564.875
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 3
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 20
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 17
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 14
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "slot_index": 0,
+          "links": [
+            23
+          ]
+        }
+      ],
+      "title": "KSampler FUERTE  — dpmpp_2m_sde / exponential / steps 40 / cfg 9.0",
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        313047193810421,
+        "randomize",
+        40,
+        9,
+        "dpmpp_2m_sde",
+        "exponential",
+        0.85
+      ]
+    },
+    {
+      "id": 12,
+      "type": "VAEDecode",
+      "pos": [
+        1810.978452871645,
+        210.73404315241817
+      ],
+      "size": [
+        225,
+        71.59375
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 21
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 9
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "slot_index": 0,
+          "links": [
+            24
+          ]
+        }
+      ],
+      "title": "VAEDecode — Leve",
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 13,
+      "type": "VAEDecode",
+      "pos": [
+        1793.7995842193013,
+        440.85878319860024
+      ],
+      "size": [
+        225,
+        71.59375
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 22
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 27
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "slot_index": 0,
+          "links": [
+            25
+          ]
+        }
+      ],
+      "title": "VAEDecode — Moderado",
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 14,
+      "type": "VAEDecode",
+      "pos": [
+        1800.360957662905,
+        647.9454397029124
+      ],
+      "size": [
+        225,
+        71.59375
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 23
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 10
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "slot_index": 0,
+          "links": [
+            26
+          ]
+        }
+      ],
+      "title": "VAEDecode — Fuerte",
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 15,
+      "type": "SaveImage",
+      "pos": [
+        2088.430347545309,
+        -193.55247305368522
+      ],
+      "size": [
+        315,
+        315.578125
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 24
+        }
+      ],
+      "outputs": [],
+      "title": "Guardar LEVE — cine noir",
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "lab4_v2/leve_cine_noir"
+      ]
+    },
+    {
+      "id": 16,
+      "type": "SaveImage",
+      "pos": [
+        2089.0153679717414,
+        263.9933168187997
+      ],
+      "size": [
+        315,
+        315.578125
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 25
+        }
+      ],
+      "outputs": [],
+      "title": "Guardar MODERADO — editorial",
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "lab4_v2/moderado_editorial"
+      ]
+    },
+    {
+      "id": 17,
+      "type": "SaveImage",
+      "pos": [
+        2088.040731090231,
+        761.1673709112044
+      ],
+      "size": [
+        315,
+        315.578125
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 26
+        }
+      ],
+      "outputs": [],
+      "title": "Guardar FUERTE — explorador/Luna",
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "lab4_v2/fuerte_polar_luna"
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      2,
+      0,
+      9,
+      0,
+      "MODEL"
+    ],
+    [
+      2,
+      2,
+      0,
+      10,
+      0,
+      "MODEL"
+    ],
+    [
+      3,
+      2,
+      0,
+      11,
+      0,
+      "MODEL"
+    ],
+    [
+      4,
+      2,
+      1,
+      5,
+      0,
+      "CLIP"
+    ],
+    [
+      5,
+      2,
+      1,
+      6,
+      0,
+      "CLIP"
+    ],
+    [
+      6,
+      2,
+      1,
+      7,
+      0,
+      "CLIP"
+    ],
+    [
+      7,
+      2,
+      1,
+      8,
+      0,
+      "CLIP"
+    ],
+    [
+      8,
+      2,
+      2,
+      4,
+      1,
+      "VAE"
+    ],
+    [
+      9,
+      2,
+      2,
+      12,
+      1,
+      "VAE"
+    ],
+    [
+      10,
+      2,
+      2,
+      14,
+      1,
+      "VAE"
+    ],
+    [
+      11,
+      3,
+      0,
+      4,
+      0,
+      "IMAGE"
+    ],
+    [
+      12,
+      4,
+      0,
+      9,
+      3,
+      "LATENT"
+    ],
+    [
+      13,
+      4,
+      0,
+      10,
+      3,
+      "LATENT"
+    ],
+    [
+      14,
+      4,
+      0,
+      11,
+      3,
+      "LATENT"
+    ],
+    [
+      15,
+      5,
+      0,
+      9,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      16,
+      5,
+      0,
+      10,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      17,
+      5,
+      0,
+      11,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      18,
+      6,
+      0,
+      9,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      19,
+      7,
+      0,
+      10,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      20,
+      8,
+      0,
+      11,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      21,
+      9,
+      0,
+      12,
+      0,
+      "LATENT"
+    ],
+    [
+      22,
+      10,
+      0,
+      13,
+      0,
+      "LATENT"
+    ],
+    [
+      23,
+      11,
+      0,
+      14,
+      0,
+      "LATENT"
+    ],
+    [
+      24,
+      12,
+      0,
+      15,
+      0,
+      "IMAGE"
+    ],
+    [
+      25,
+      13,
+      0,
+      16,
+      0,
+      "IMAGE"
+    ],
+    [
+      26,
+      14,
+      0,
+      17,
+      0,
+      "IMAGE"
+    ],
+    [
+      27,
+      2,
+      2,
+      13,
+      1,
+      "VAE"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "LEVE (denoise 0.45) — Cine Noir / Fotografía de época",
+      "bounding": [
+        760,
+        170,
+        1580,
+        280
+      ],
+      "color": "#3d7040",
+      "font_size": 20,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "MODERADO (denoise 0.65) — Editorial de Revista / Alta moda",
+      "bounding": [
+        760,
+        340,
+        1580,
+        280
+      ],
+      "color": "#7d6530",
+      "font_size": 20,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "FUERTE (denoise 0.85) — Explorador Polar / Escena en la Luna",
+      "bounding": [
+        760,
+        510,
+        1580,
+        280
+      ],
+      "color": "#7d3030",
+      "font_size": 20,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.40980807321904456,
+      "offset": [
+        587.9865715424049,
+        496.7762063186069
+      ]
+    },
+    "info": {
+      "name": "Lab4 Individual v6 — checkpoint vacío, selección manual requerida",
+      "custom_nodes_required": [],
+      "note": "El campo de checkpoint está vacío a propósito. El usuario DEBE seleccionar un modelo SD1.5 desde el dropdown antes de ejecutar."
+    },
+    "frontendVersion": "1.42.6",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}
